@@ -14,25 +14,11 @@ from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
 from drf_spectacular.utils import extend_schema
 
 
-class ProfileApi(ApiAuthMixin, APIView):
-
-    class OutPutSerializer(serializers.ModelSerializer):
-        class Meta:
-            model = Profile 
-            fields = ("bio", "posts_count", "subscriber_count", "subscription_count")
-
-    @extend_schema(responses=OutPutSerializer)
-    def get(self, request):
-        query = get_profile(user=request.user)
-        return Response(self.OutPutSerializer(query, context={"request":request}).data)
-
-
 class RegisterApi(APIView):
 
 
     class InputRegisterSerializer(serializers.Serializer):
         email = serializers.EmailField(max_length=255)
-        bio = serializers.CharField(max_length=1000, required=False)
         password = serializers.CharField(
                 validators=[
                         number_validator,
@@ -85,7 +71,6 @@ class RegisterApi(APIView):
             user = register(
                     email=serializer.validated_data.get("email"),
                     password=serializer.validated_data.get("password"),
-                    bio=serializer.validated_data.get("bio"),
                     )
         except Exception as ex:
             return Response(
@@ -93,4 +78,3 @@ class RegisterApi(APIView):
                     status=status.HTTP_400_BAD_REQUEST
                     )
         return Response(self.OutPutRegisterSerializer(user, context={"request":request}).data)
-

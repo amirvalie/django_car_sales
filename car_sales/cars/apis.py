@@ -4,7 +4,7 @@ from rest_framework import serializers
 from .models import Car
 from .blogic.services import create_car
 
-class CarApi(APIView):
+class CreateCarApi(APIView):
     def InputCarSerializer(serializers.Serializer):
         name                 = serializers.CharField(max_length=255)
         colorـname           = serializers.CharField(max_length=50)

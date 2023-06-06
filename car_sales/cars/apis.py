@@ -13,7 +13,7 @@ class CarApi(APIView):
         number_of_passangers = serializers.IntegerField(min_value=1)
     
     def OutputCarSerializer(serializer.ModelSerializer):
-        user = serializer.ReadOnlyField(source='user.email')
+        user = serializers.ReadOnlyField(source='user.email')
         class Meta:
             model  = Car
             fields = (

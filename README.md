@@ -1,7 +1,6 @@
 # DjangoCarSales
 
-## project setup
-
+## project description
 
 - پروژه تحت بستر جنگو در ارتباط با یک شرکت فروش خودرو با در نظر گرفتن تعداد حداکثر 10 میلیارد محصول (خودرو) است. 
 
@@ -23,6 +22,8 @@
 
 - تست صحت عملکرد برنامه پیش از اجرا الزامیست.
 
+
+## project setup
 
 
 1- compelete cookiecutter workflow (recommendation: leave project_slug empty) and go inside the project

@@ -3,6 +3,6 @@ from . import apis
 
 
 urlpatterns = [
-    path('create-car/', apis.CreateCarApi.as_view(), 'car',name='create-car'),
+    path('create-car/', apis.CreateCarApi.as_view(),name='create-car'),
 
 ]

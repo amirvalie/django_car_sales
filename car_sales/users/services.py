@@ -1,5 +1,5 @@
 from django.db import transaction 
-from .models import BaseUser, Profile
+from .models import BaseUser
 
 @transaction.atomic
 def register(*, email:str, password:str) -> BaseUser:

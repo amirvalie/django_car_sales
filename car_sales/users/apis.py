@@ -5,10 +5,9 @@ from rest_framework import serializers
 
 from django.core.validators import MinLengthValidator
 from .validators import number_validator, special_char_validator, letter_validator
-from car_sales.users.models import BaseUser , Profile
+from car_sales.users.models import BaseUser
 from car_sales.api.mixins import ApiAuthMixin
-from car_sales.users.selectors import get_profile
-from car_sales.users.services import register 
+from car_sales.users.services import register
 from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
 
 from drf_spectacular.utils import extend_schema

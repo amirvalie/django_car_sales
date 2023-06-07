@@ -1,11 +1,17 @@
+from drf_spectacular.utils import extend_schema
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import serializers
 from .models import Car
 from .blogic.services import create_car
+from .permissions import IsInSalesGroup
+from car_sales.api.mixins import ApiAuthMixin
 
 
-class CreateCarApi(APIView):
+class CreateCarApi(ApiAuthMixin, APIView):
+    permission_classes = [IsAuthenticated, IsInSalesGroup]
+
     class InputCarSerializer(serializers.Serializer):
         car_name = serializers.CharField(max_length=255)
         car_color = serializers.CharField(max_length=50)
@@ -27,6 +33,7 @@ class CreateCarApi(APIView):
                 'number_of_passangers',
             )
 
+    @extend_schema(request=InputCarSerializer, responses=OutputCarSerializer)
     def post(self, request):
         serializer = self.InputCarSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)

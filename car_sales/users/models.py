@@ -52,7 +52,7 @@ class BaseUser(BaseModel, AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
-
+    @property
     def is_staff(self):
         return self.is_admin
 

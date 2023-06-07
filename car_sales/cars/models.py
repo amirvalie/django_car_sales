@@ -2,7 +2,6 @@ from django.db import models
 from car_sales.common.models import BaseModel
 from car_sales.users.models import BaseUser
 
-
 # Create your models here.
 
 class Car(models.Model):

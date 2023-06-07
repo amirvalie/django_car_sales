@@ -19,6 +19,7 @@ LOCAL_APPS = [
     'car_sales.users.apps.UsersConfig',
     'car_sales.authentication.apps.AuthenticationConfig',
     'car_sales.cars.apps.CarsConfig',
+    'car_sales.search.apps.SearchConfig',
 ]
 
 THIRD_PARTY_APPS = [

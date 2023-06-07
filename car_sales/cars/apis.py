@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import serializers
 from .models import Car
-from .blogic.services import create_car
+from .blogic.services import create_car, update_car
 from .permissions import IsInSalesGroup
 from car_sales.api.mixins import ApiAuthMixin
 
@@ -51,3 +51,43 @@ class CreateCarApi(ApiAuthMixin, APIView):
                 f'Database error {ex}'
             )
         return Response(self.OutputCarSerializer(car).data)
+
+
+class UpdateCarApi(ApiAuthMixin, APIView):
+    permission_classes = [IsAuthenticated, IsInSalesGroup]
+
+    class InputCarSerializerPut(serializers.Serializer):
+        car_name = serializers.CharField(max_length=255, required=False)
+        car_color = serializers.CharField(max_length=50, required=False)
+        number_of_cylinder = serializers.IntegerField(min_value=1, required=False)
+        engine_volume = serializers.IntegerField(min_value=624, required=False)
+        number_of_passangers = serializers.IntegerField(min_value=1, required=False)
+
+    class OutputCarSerializerPut(serializers.ModelSerializer):
+        user = serializers.ReadOnlyField(source='user.email')
+
+        class Meta:
+            model = Car
+            fields = (
+                'user',
+                'car_name',
+                'car_color',
+                'number_of_cylinder',
+                'engine_volume',
+                'number_of_passangers',
+            )
+
+    @extend_schema(request=InputCarSerializerPut, responses=OutputCarSerializerPut)
+    def put(self, request, car_id):
+        serializer = self.InputCarSerializerPut(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        try:
+            car = update_car(
+                car_id=car_id,
+                **serializer.validated_data
+            )
+        except Exception as ex:
+            return Response(
+                f'Database error {ex}'
+            )
+        return Response(self.OutputCarSerializerPut(car).data)

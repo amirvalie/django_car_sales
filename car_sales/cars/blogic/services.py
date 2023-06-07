@@ -1,5 +1,7 @@
+from .selectors import get_car
 from ..models import Car
 from car_sales.users.models import BaseUser
+from django.db import transaction
 
 
 def create_car(
@@ -19,3 +21,15 @@ def create_car(
         number_of_passangers=number_of_passangers
     )
     return obj
+
+
+@transaction.atomic
+def update_car(
+        car_id: int,
+        **kwargs
+) -> Car:
+    car_obj = get_car(car_id=car_id)
+    for field, value in kwargs.items():
+        setattr(car_obj, field, value)
+    car_obj.save()
+    return car_obj

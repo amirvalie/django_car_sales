@@ -29,6 +29,7 @@ THIRD_PARTY_APPS = [
     'corsheaders',
     'drf_spectacular',
     'django_extensions',
+    'django_elasticsearch_dsl',
 ]
 
 INSTALLED_APPS = [
@@ -102,6 +103,12 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME'  :  os.path.join(BASE_DIR,'db.sqlite3'),
     }
+}
+
+ELASTICSEARCH_DSL = {
+    'default': {
+        'hosts': 'localhost:9200'
+    },
 }
 
 # Password validation

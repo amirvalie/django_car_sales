@@ -5,9 +5,13 @@ from rest_framework.response import Response
 from rest_framework import serializers
 from .models import Car
 from .blogic.services import create_car, update_car
+from .blogic.selectors import generate_q_expression
 from .permissions import IsInSalesGroup
 from car_sales.api.mixins import ApiAuthMixin
 from rest_framework import status
+from car_sales.search.documents import CarDocument
+from rest_framework.pagination import LimitOffsetPagination
+from elasticsearch_dsl import Q
 
 
 class CreateCarApi(ApiAuthMixin, APIView):
@@ -21,7 +25,7 @@ class CreateCarApi(ApiAuthMixin, APIView):
         number_of_passengers = serializers.IntegerField(min_value=1)
 
     class OutputCarSerializer(serializers.ModelSerializer):
-        owner = serializers.ReadOnlyField(source='user.email')
+        owner = serializers.ReadOnlyField(source='owner.email')
 
         class Meta:
             model = Car
@@ -65,7 +69,7 @@ class UpdateCarApi(ApiAuthMixin, APIView):
         number_of_passengers = serializers.IntegerField(min_value=1, required=False)
 
     class OutputCarSerializerPut(serializers.ModelSerializer):
-        owner = serializers.ReadOnlyField(source='user.email')
+        owner = serializers.ReadOnlyField(source='owner.email')
 
         class Meta:
             model = Car
@@ -93,3 +97,33 @@ class UpdateCarApi(ApiAuthMixin, APIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
         return Response(self.OutputCarSerializerPut(car).data,status=status.HTTP_200_OK)
+
+
+class CarSearchAPIView(ApiAuthMixin,APIView, LimitOffsetPagination):
+    document_class = CarDocument
+    class OutputCarSerializer(serializers.ModelSerializer):
+        owner = serializers.ReadOnlyField(source='owner.email')
+        class Meta:
+            model = Car
+            fields = (
+                'owner',
+                'car_name',
+                'car_color',
+                'number_of_cylinder',
+                'engine_volume',
+                'number_of_passengers',
+            )
+
+    def get(self, request, query):
+        try:
+            q = generate_q_expression(query)
+            search = CarDocument.search().query(q)
+            response = search.execute()
+            results = self.paginate_queryset(response, request, view=self)
+            serializer = self.OutputCarSerializer(response, many=True)
+            return self.get_paginated_response(serializer.data)
+        except BaseException as ex: 
+            return Response(
+                f'Erro {ex}',
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )

@@ -160,6 +160,7 @@ STATIC_URL = '/static/'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 REST_FRAMEWORK = {
+    'PAGE_SIZE': 20,
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'EXCEPTION_HANDLER': 'car_sales.api.exception_handlers.drf_default_with_modifications_exception_handler',
     # 'EXCEPTION_HANDLER': 'car_sales.api.exception_handlers.hacksoft_proposed_exception_handler',

@@ -13,7 +13,6 @@ from car_sales.search.documents import CarDocument
 from rest_framework.pagination import LimitOffsetPagination
 from elasticsearch_dsl import Q
 
-
 class CreateCarApi(ApiAuthMixin, APIView):
     permission_classes = [IsAuthenticated, IsInSalesGroup]
 
@@ -99,9 +98,11 @@ class UpdateCarApi(ApiAuthMixin, APIView):
         return Response(self.OutputCarSerializerPut(car).data,status=status.HTTP_200_OK)
 
 
-class CarSearchAPIView(ApiAuthMixin,APIView, LimitOffsetPagination):
+class CarSearchAPI(ApiAuthMixin,APIView, LimitOffsetPagination):
     document_class = CarDocument
-    permission_classes = []
+    permission_classes = [IsInSupportGroup]
+    default_limit = 10
+    max_limit = 50
     class OutputCarSerializer(serializers.ModelSerializer):
         owner = serializers.ReadOnlyField(source='owner.email')
         class Meta:

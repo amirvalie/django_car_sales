@@ -1,7 +1,7 @@
 from .selectors import get_car
 from ..models import Car
 from car_sales.users.models import BaseUser
-from car_sales.users.selectors import get_user
+from car_sales.users.blogic.selectors import get_user
 from django.db import transaction
 import random
 from django.db import IntegrityError

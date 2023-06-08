@@ -30,13 +30,8 @@ python manage.py migrate
 python manage.py runserver
 ```# django_car_sales
 
-6- create bulk car object
-
+3- create your env
 ```
-python manage.py shell
-
-from car_sales.cars.blogic.services import create_bulk_car
-
-create_bulk_car(number_of_objects) #1000
+cp .env.example .env
 ```
 

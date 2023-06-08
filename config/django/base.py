@@ -78,33 +78,41 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 # DATABASES = {
-#     'default': env.db('DATABASE_URL', default='psql://user:user@127.0.0.1:5432/car_sales'),
+#     'default': env.db('DATABASE_URL', default='psql://user:user@127.0.0.1:5432/cars_db'),
 # }
 # DATABASES['default']['ATOMIC_REQUESTS'] = True
-
+#
 # if os.environ.get('GITHUB_WORKFLOW'):
 #     DATABASES = {
 #         'default': {
 #             'ENGINE': 'django.db.backends.postgresql',
 #             'NAME': 'github_actions',
-#             'USER': 'user',
-#             'PASSWORD': 'user',
+#             'USER': 'amir_valie',
+#             'PASSWORD': ***REMOVED***,
 #             'HOST': '127.0.0.1',
 #             'PORT': '5432',
 #         }
 #     }
-
 DATABASES = {
-    'default':{
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME'  :  os.path.join(BASE_DIR,'db.sqlite3'),
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'cars_db',
+        'USER': 'amir_valie',
+        'PASSWORD': ***REMOVED***,
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
     }
 }
+# DATABASES = {
+#     'default':{
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME'  :  os.path.join(BASE_DIR,'db.sqlite3'),
+#     }
+# }
 
 ELASTICSEARCH_DSL = {
     'default': {
@@ -144,7 +152,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
@@ -162,7 +169,6 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': []
 }
 
-
 # Redis
 CACHES = {
     'default': {
@@ -173,7 +179,6 @@ CACHES = {
 # Cache time to live is 15 minutes.
 CACHE_TTL = 60 * 15
 
-
 APP_DOMAIN = env("APP_DOMAIN", default="http://localhost:8000")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
@@ -183,5 +188,5 @@ from config.settings.jwt import *  # noqa
 from config.settings.sessions import *  # noqa
 from config.settings.celery import *  # noqa
 from config.settings.swagger import *  # noqa
-#from config.settings.sentry import *  # noqa
-#from config.settings.email_sending import *  # noqa
+# from config.settings.sentry import *  # noqa
+# from config.settings.email_sending import *  # noqa

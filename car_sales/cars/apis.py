@@ -6,7 +6,7 @@ from rest_framework import serializers
 from .models import Car
 from .blogic.services import create_car, update_car
 from .blogic.selectors import generate_q_expression
-from .permissions import IsInSalesGroup
+from .permissions import IsInSalesGroup, IsInSupportGroup
 from car_sales.api.mixins import ApiAuthMixin
 from rest_framework import status
 from car_sales.search.documents import CarDocument
@@ -101,6 +101,7 @@ class UpdateCarApi(ApiAuthMixin, APIView):
 
 class CarSearchAPIView(ApiAuthMixin,APIView, LimitOffsetPagination):
     document_class = CarDocument
+    permission_classes = []
     class OutputCarSerializer(serializers.ModelSerializer):
         owner = serializers.ReadOnlyField(source='owner.email')
         class Meta:

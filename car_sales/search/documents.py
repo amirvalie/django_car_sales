@@ -5,17 +5,11 @@ from car_sales.cars.models import Car
 
 @registry.register_document
 class CarDocument(Document):
-    user = fields.ObjectField(properties={
-        'id': fields.IntegerField(),
-        'email': fields.TextField(),
+    owner = fields.ObjectField(properties={
+        'email':fields.TextField(),
     })
-
     class Index:
-        name = 'cars'
-        settings = {
-            'number_of_shards': 1,
-            'number_of_replicas': 0,
-        }
+        name = 'carsdocument'
 
     class Django:
         model = Car
@@ -25,5 +19,5 @@ class CarDocument(Document):
             'car_color',
             'number_of_cylinder',
             'engine_volume',
-            'number_of_passangers',
+            'number_of_passengers',
         ]

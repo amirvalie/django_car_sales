@@ -1,3 +1,5 @@
+
+
 Django==4.0.7
 django-environ==0.9.0
 psycopg2-binary==2.9.5
@@ -27,3 +29,7 @@ Faker==15.1.1
 factory-boy==3.2.1
 pytest==7.2.0
 pytest-django==4.5.2
+django-elasticsearch-dsl==7.3
+elastic-transport==8.4.0
+elasticsearch==7.17.9
+elasticsearch-dsl==7.4.1

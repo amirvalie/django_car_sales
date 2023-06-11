@@ -122,7 +122,7 @@ class CarSearchAPI(ApiAuthMixin,APIView, LimitOffsetPagination):
             search = CarDocument.search().query(q)
             response = search.execute()
             results = self.paginate_queryset(response, request, view=self)
-            serializer = self.OutputCarSerializer(response, many=True)
+            serializer = self.OutputCarSerializer(results, many=True)
             return self.get_paginated_response(serializer.data)
         except BaseException as ex: 
             return Response(

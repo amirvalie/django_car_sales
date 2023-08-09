@@ -81,38 +81,13 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': env.db('DATABASE_URL', default='psql://user:user@127.0.0.1:5432/cars_db'),
-# }
-# DATABASES['default']['ATOMIC_REQUESTS'] = True
-#
-# if os.environ.get('GITHUB_WORKFLOW'):
-#     DATABASES = {
-#         'default': {
-#             'ENGINE': 'django.db.backends.postgresql',
-#             'NAME': 'github_actions',
-#             'USER': 'amir_valie',
-#             'PASSWORD': ***REMOVED***,
-#             'HOST': '127.0.0.1',
-#             'PORT': '5432',
-#         }
-#     }
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'db_cars',
-        'USER': 'amir_valie',
-        'PASSWORD': ***REMOVED***,
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
-    }
-}
-# DATABASES = {
-#     'default':{
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME'  :  os.path.join(BASE_DIR,'db.sqlite3'),
-#     }
-# }
+     'default':{
+         'ENGINE': 'django.db.backends.sqlite3',
+         'NAME'  :  os.path.join(BASE_DIR,'db.sqlite3'),
+     }
+ }
+
 
 ELASTICSEARCH_DSL = {
     'default': {

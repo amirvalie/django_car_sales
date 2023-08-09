@@ -10,8 +10,11 @@ from .permissions import IsInSalesGroup, IsInSupportGroup
 from car_sales.api.mixins import ApiAuthMixin
 from rest_framework import status
 from car_sales.search.documents import CarDocument
-from rest_framework.pagination import LimitOffsetPagination
+# from rest_framework.pagination import LimitOffsetPagination
 from elasticsearch_dsl import Q
+from django_filters.rest_framework import DjangoFilterBackend
+from car_sales.api.pagination import LimitOffsetPagination
+
 
 class CreateCarApi(ApiAuthMixin, APIView):
     permission_classes = [IsAuthenticated, IsInSalesGroup]
@@ -95,10 +98,10 @@ class UpdateCarApi(ApiAuthMixin, APIView):
                 f'Database error {ex}',
                 status=status.HTTP_404_NOT_FOUND,
             )
-        return Response(self.OutputCarSerializerPut(car).data,status=status.HTTP_200_OK)
+        return Response(self.OutputCarSerializerPut(car).data, status=status.HTTP_200_OK)
 
 
-class CarSearchAPI(ApiAuthMixin,APIView, LimitOffsetPagination):
+class CarSearchAPI(ApiAuthMixin, APIView, LimitOffsetPagination):
     document_class = CarDocument
     permission_classes = [IsInSupportGroup]
     default_limit = 10
@@ -122,10 +125,52 @@ class CarSearchAPI(ApiAuthMixin,APIView, LimitOffsetPagination):
             search = CarDocument.search().query(q)
             response = search.execute()
             results = self.paginate_queryset(response, request, view=self)
-            serializer = self.OutputCarSerializer(response, many=True)
+            serializer = self.OutputCarSerializer(results, many=True)
             return self.get_paginated_response(serializer.data)
-        except BaseException as ex: 
+        except BaseException as ex:
             return Response(
                 f'Erro {ex}',
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
+
+
+class CarSearchSimpleAPI(APIView):
+    filter_backends = [DjangoFilterBackend]
+    class OutputCarSerializer(serializers.ModelSerializer):
+        owner = serializers.ReadOnlyField(source='owner.email')
+
+        class Meta:
+            model = Car
+            fields = (
+                'owner',
+                'car_name',
+                'car_color',
+                'number_of_cylinder',
+                'engine_volume',
+                'number_of_passengers',
+            )
+
+    def get(self, request, query):
+        query = Car.objects.filter(
+            car_name__icontains=query,
+        )
+        result = self.paginate_queryset(query, request=request)
+        serializer = self.OutputCarSerializer(result, many=True)
+        return self.get_paginated_response(serializer.data)
+
+
+class ListCarApi(APIView):
+	pagination_class = [LimitOffsetPagination]
+
+	class CarListSerializer(serializers.ModelSerializer):
+		class Meta:
+			model = Car
+			fields = ('owner','car_name','car_color')
+
+	@extend_schema(request=CarListSerializer)	
+	def get(self,request,*args,**kwargs):
+		queryset = Car.objects.all()
+		serializer = self.CarListSerializer(queryset, many=True)
+		return Response(serializer.data)
+
+	

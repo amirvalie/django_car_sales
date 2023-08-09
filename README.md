@@ -1,5 +1,6 @@
 # DjangoCarSales
 
+The purpose of creating this project was to use Django Style Guide and search with Elasticsearch search engine
 ## project setup
 
 
